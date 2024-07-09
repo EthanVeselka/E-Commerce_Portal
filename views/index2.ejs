@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>CSCE 315 Project 3</title>
+  <link id="index" rel="stylesheet" href="/css/index2.css">
+  <script src="https://kit.fontawesome.com/a31f3aa58a.js" crossorigin="anonymous"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<section class="header">
+  <div id="navbar" class="nav-container">
+    <div id="home">
+      <div><i class="fa-solid fa-house fa-xl" onclick="redirectIndex()"></i></div>
+    </div>
+    <div id="logo">
+      <a href="https://www.smoothieking.com"><img src="images/logo3.png"></a>
+    </div>
+    <div id="stuff">
+      <div><input type="button" value="Sign Out" onclick="redirectLogout()"></div>
+      <!-- <div><i class="fa-solid fa-cart-shopping fa-xl"></i></div> -->
+      <div id="translate-container"></div>
+    </div>
+  </div>
+</section>
+
+<section class="main-page">
+  <h1>Smoothie King at the MSC</h1>
+  <div class="options">
+    <div><input type="button" value="Server" onclick="redirectServer()"></div>
+    <div><input type="button" value="Manager" onclick="redirectManager()"></div>
+  </div>
+
+  <div id="map-container"></div>
+
+  <!--Begin Google Translate-->
+  <script type="text/javascript">
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({ pageLanguage: 'en' }, 'translate-container');
+    }
+  </script>
+  <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+  <!--End Google Translate-->
+
+  <!--Begin Google Map-->
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyANXhBD57wL5u0fGL9s238xH1Lm3ikYUcU"></script>
+  <script>
+    function initialize() {
+      // the position of the smoothieking at the msc
+      var smoothieKingCoords = new google.maps.LatLng(30.61229, -96.34104);
+      // setup the map
+      var mapProp = {
+        center: smoothieKingCoords,
+        zoom: 15,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+      };
+      // render the map
+      var map = new google.maps.Map(document.getElementById("map-container"), mapProp);
+      // add marker
+      const marker = new google.maps.Marker({
+        position: smoothieKingCoords,
+        map: map
+      });
+    }
+    window.addEventListener('load', initialize);
+  </script>
+  <!--End Google Map-->
+
+  <script>
+    function redirectIndex() {
+      window.location.href = "/signedin";
+    }
+    function redirectManager() {
+      window.location.href = "/manager";
+    }
+    function redirectServer() {
+      window.location.href = "/server";
+    }
+    function redirectCustomer() {
+      window.location.href = "/customer";
+    }
+    function redirectLogout() {
+      window.location.href = "/logout";
+    }
+  </script>
+
+  <!-- <script>
+      let mp = document.getElementById("main-page");
+      let navbar = document.getElementById("navbar");
+      let navPos = navbar.getBoundingClientRect().top;
+      window.addEventListener("scroll", e => {
+        let scrollPos = window.scrollY;
+        if (scrollPos > navPos) {
+          navbar.classList.add('sticky');
+          header.classList.add('navbarOffsetMargin');
+        } else {
+          navbar.classList.remove('sticky');
+          header.classList.remove('navbarOffsetMargin');
+        }
+      });
+    </script> -->
+</section>
+
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+   	<title>Pairs Report</title>
+    <link href="/css/style.css" rel="stylesheet" type="text/css">
+    <style>
+		table thead { display:block; }
+		table tbody { height:300px; overflow-y:scroll; display:block; }
+	</style>
+</head>
+<body>
+   	<h1>Pairs Report</h1>
+    <form method='GET' action="/manager/pairs">
+    <div class="container">
+        <div class="prompt">
+            <span>Please input the start and end date for the report in the format yyyy-mm-dd</span>
+        </div>
+        <div>
+            <label for="startdate">Start Date: </label>
+            <input type="text" id="startdate" name="startdate" placeholder="yyyy-mm-dd" pattern="\d{4}-\d{2}-\d{2}" required/>
+        </div>
+        <div>
+            <label for="enddate">End Date: </label>
+            <input type="text" id="enddate" name="enddate" placeholder="yyyy-mm-dd" pattern="\d{4}-\d{2}-\d{2}" required/>
+        </div>
+    </div>
+    <div >
+        <input type="submit" value="Generate Report" />
+    </div>
+    </form>
+
+    <% if (display) { %>
+        <table>
+            <thead>
+                <tr>
+                    <td width="200 px">Common Pairs</td>
+                    <td width="200 px">Number of Occurences</td>
+                </tr>
+            </thead>
+            <tbody>
+                <% for (let [key, value] of sortedPairs) {%>
+                    <tr>
+                        <td width="200 px"><%=key%></td> 
+                        <td width="200 px"><%=value%></td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+    <% } %>
+
+</body>
+</html>

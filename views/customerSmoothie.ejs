@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smoothie King</title>
+    <link rel="stylesheet" href="/css/customerCustomize.css">
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.2/examples/heroes/">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <!-- Script to use jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="https://kit.fontawesome.com/a31f3aa58a.js" crossorigin="anonymous"></script>
+    <!--Begin Google Translate-->
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({ pageLanguage: 'en' }, 'translate-container');
+        }
+    </script>
+    <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <!--End Google Translate-->
+</head>
+
+<body>
+    <nav class="navbar sticky-top bg-light">
+        <div class="container-fluid">
+            <a class="back-button" href="/customer">
+                <img src="../images/back_arrow.png" width="25" height="25" class="d-inline-block align-text-left">
+            </a>
+            <a class="navbar-brand" href="#">
+                <img src="https://static.olocdn.net/img/smoothieking/logo/logo-wide.png?v=1668607499" alt="Logo"
+                    width="60" height="40" class="d-inline-block align-text-top">
+            </a>
+            <!-- shopping cart to toggle sidebar (offcanvas element) -->
+            <button class="cartButton btn btn-light" type="button" data-bs-toggle="offcanvas"
+                data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"><i
+                    class="fa-solid fa-cart-shopping fa-xl"></i></button>
+
+            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight"
+                aria-labelledby="offcanvasRightLabel">
+                <div class="offcanvas-header">
+                    <h5 id="offcanvasRightLabel">Your Order</h5>
+                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
+                        aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <% if (orderCustomer.items.length> 0) { %>
+                        <ol class="list-group list-group-numbered">
+
+                            <% for (let i=0; i < orderCustomer.items.length; i++) { %>
+                                <li class="list-group-item d-flex justify-content-between align-items-start">
+                                    <div class="ms-2 me-auto">
+                                        <div class="fw-bold">
+                                            <%= orderCustomer.items[i].itemName %>
+                                        </div>
+                                        <%= "$" + orderCustomer.items[i].getTotalPrice() %>
+                                    </div>
+                                    <span name="cancelItemButton" class="cancelButton btn btn-sm  btn-dark ">X</span>
+                                </li>
+
+                                <!-- use this to track which item number so if clicked on X, it will remove that item from the list -->
+                                <p name="itemNumberToDelete" type="hidden" class="visually-hidden">
+                                    <%= i %>
+                                </p>
+
+                                <% } %>
+                        </ol>
+                        <div class=" d-grid gap-1">
+                            <button class="checkout btn btn-danger" type="button" name="checkoutButton">
+                                <div class="checkoutText">
+                                    Checkout
+                                </div>
+                            </button>
+                        </div>
+                        <% } else { %>
+                            <p class="lead">Your cart is empty</p>
+                            <% } %>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container col-xxl-8 px-4 py-5">
+        <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
+            <div class="col-10 col-sm-8 col-lg-6">
+                <img src="../images/<%=itemname%>.png" class="d-block mx-lg-auto img-fluid" alt="Bootstrap Themes"
+                    width="330" height="420" loading="lazy">
+            </div>
+            <div class="col-lg-6">
+                <h1 name="smoothieName" class="display-5 fw-bold lh-1 mb-3">
+                    <%= itemname %>
+                </h1>
+                <!-- have a hidden element to store price -->
+                <p name="smoothiePrice" class="lead" hidden>
+                    <%= price %>
+                </p>
+                <p class="lead">
+                    <% for (var i=0; i < ingredientNames.length; i++) { %>
+                        <% if (i !=ingredientNames.length - 1) { %>
+                            <%= ingredientNames[i] + "," %>
+                                <% } else { %>
+                                    <%= ingredientNames[i] %>
+                                        <% } %>
+                                            <% } %>
+                </p>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                    <button type="button" class="btn btn-danger btn-lg px-4 me-md-2" name="submitItemButton">Add to
+                        Cart</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- starting customizations -->
+    <div class="customize container-lg" id="scroll-customize">
+        <h1>
+            Customize your smoothie
+        </h1>
+        <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+
+            <% for (var i=0; i < ingredientNames.length; i++) { %>
+                <input type="checkbox" class="btn-check" id="btncheck<%= i %>" autocomplete="off"
+                    name="removeIngredientsCheckbox">
+                <label class="btn btn-outline-danger btn-lg" for="btncheck<%= i %>" name="removeIngredientName">
+                    No <%= ingredientNames[i] %>
+                </label>
+                <% } %>
+        </div>
+    </div>
+
+    <!-- enhancers add ons -->
+    <div class="enhancers container-lg" id="scroll-enhancers">
+        <h1>
+            Add Enhancers
+        </h1>
+        <p class="lead">
+            Meet your nutritional goals
+        </p>
+        <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+
+            <% for (var i=0; i < enhancers.length; i++) { %>
+                <input type="checkbox" class="btn-check" id="enhancers_btncheck<%= i %>" autocomplete="off"
+                    name="enhancersCheckbox">
+                <label class="btn btn-outline-danger btn-lg" for="enhancers_btncheck<%= i %>" name="enhancerOption">
+                    <p class="h6" name="enhancerName">
+                        <%= enhancers[i] %>
+                    </p>
+                    <p class="h6" name="enhancerPrice">
+                        $<%= enhancerPrices[i] %>
+                    </p>
+                </label>
+                <% } %>
+        </div>
+    </div>
+
+    <!-- protein add ons  -->
+    <div class="proteins container-lg" id="scroll-protein">
+        <h1>
+            Add Protein
+        </h1>
+        <p class="lead">
+            Improve muscle gain and recovery
+        </p>
+        <div class="buttonsProtein btn-group" role="group" aria-label="Basic checkbox toggle button group">
+
+            <% for (var i=0; i < 7; i++) { %>
+                <input type="checkbox" class="btn-check" id="proteins_btncheck<%= i %>" autocomplete="off"
+                    name="proteinsCheckbox">
+                <label class="btn btn-outline-danger btn-lg" for="proteins_btncheck<%= i %>" name="proteinOption">
+                    <p class="h6" name="proteinName">
+                        <%= protein[i] %>
+                    </p>
+                    <p class="h6" name="proteinPrice">
+                        $<%= proteinPrices[i] %>
+                    </p>
+                </label>
+                <% } %>
+        </div>
+        <div class="buttonsProtein btn-group" role="group" aria-label="Basic checkbox toggle button group">
+
+            <% for (var i=7; i < protein.length; i++) { %>
+                <input type="checkbox" class="btn-check" id="proteins_btncheck<%= i %>" autocomplete="off"
+                    name="proteinsCheckbox">
+                <label class="btn btn-outline-danger btn-lg" for="proteins_btncheck<%= i %>" name="proteinOption">
+                    <p class="h6" name="proteinName">
+                        <%= protein[i] %>
+                    </p>
+                    <p class="h6" name="proteinPrice">
+                        $<%= proteinPrices[i] %>
+                    </p>
+                </label>
+                <% } %>
+        </div>
+    </div>
+
+    <!-- fruits and vegetables -->
+    <div class="fruits container-lg" id="scroll-fruits_vegetables">
+        <h1>
+            Add Fruits and Vegetables
+        </h1>
+        <p class="lead">
+            Add more nutrients
+        </p>
+
+        <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+
+            <% for (var i=0; i < fruit_vegetable.length; i++) { %>
+                <input type="checkbox" class="btn-check" id="fruits_btncheck<%= i %>" autocomplete="off"
+                    name="fruitsCheckbox">
+                <label class="btn btn-outline-danger btn-lg" for="fruits_btncheck<%= i %>" name="fruitOption">
+                    <p class="h6" name="fruitName">
+                        <%= fruit_vegetable[i] %>
+                    </p>
+                    <p class="h6" name="fruitPrice">
+                        $<%= fruit_vegetablePrices[i] %>
+                    </p>
+                </label>
+                <% } %>
+        </div>
+    </div>
+
+    <!-- extras -->
+    <div class="extras container-lg" id="scroll-extras">
+        <h1>
+            Add Extras
+        </h1>
+        <p class="lead">
+            Customize the flavor your way
+        </p>
+
+        <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+
+            <% for (var i=0; i < 10; i++) { %>
+                <input type="checkbox" class="btn-check" id="extras_btncheck<%= i %>" autocomplete="off"
+                    name="extrasCheckbox">
+                <label class="btn btn-outline-danger btn-lg" for="extras_btncheck<%= i %>" name="extraOption">
+                    <p class="h6" name="extraName">
+                        <%= extras[i] %>
+                    </p>
+                    <p class="h6" name="extraPrice">
+                        $<%= extrasPrices[i] %>
+                    </p>
+                </label>
+                <% } %>
+        </div>
+        <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+
+            <% for (var i=10; i < 20; i++) { %>
+                <input type="checkbox" class="btn-check" id="extras_btncheck<%= i %>" autocomplete="off"
+                    name="extrasCheckbox">
+                <label class="btn btn-outline-danger btn-lg" for="extras_btncheck<%= i %>" name="extraOption">
+                    <p class="h6" name="extraName">
+                        <%= extras[i] %>
+                    </p>
+                    <p class="h6" name="extraPrice">
+                        $<%= extrasPrices[i] %>
+                    </p>
+                </label>
+                <% } %>
+        </div>
+        <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+
+            <% for (var i=20; i < extras.length; i++) { %>
+                <input type="checkbox" class="btn-check" id="extras_btncheck<%= i %>" autocomplete="off"
+                    name="extrasCheckbox">
+                <label class="btn btn-outline-danger btn-lg" for="extras_btncheck<%= i %>" name="extraOption">
+                    <p class="h6" name="extraName">
+                        <%= extras[i] %>
+                    </p>
+                    <p class="h6" name="extraPrice">
+                        $<%= extrasPrices[i] %>
+                    </p>
+                </label>
+                <% } %>
+        </div>
+    </div>
+
+
+    <footer class="sticky-bottom footer mt-auto py-3 bg-light ">
+        <div class="container">
+            <span class="text-muted">
+                <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+                    <li><a href="#scroll-customize" class="nav-link px-2 link-dark" role="button">Customize Your
+                            Smoothie</a></li>
+                    <li><a href="#scroll-enhancers" class="nav-link px-2 link-dark" role="button">Add Enhancers</a>
+                    </li>
+                    <li><a href="#scroll-protein" class="nav-link px-2 link-dark" role="button">Add Protein</a>
+                    </li>
+                    <li><a href="#scroll-fruits_vegetables" class="nav-link px-2 link-dark" role="button">Add Fruits and
+                            Vegetables</a></li>
+                    <li><a href="#scroll-extras" class="nav-link px-2 link-dark" role="button">Add Extras</a></li>
+                    <li class="footerAdd"><button type="button" class=" btn btn-danger btn-sm px-4 me-md-2"
+                            name="submitItemButton">Add to
+                            Cart</button></li>
+                    <li>
+                        <div class="googleTranslate" id="translate-container"></div>
+                    </li>
+                </ul>
+            </span>
+        </div>
+    </footer>
+
+    <script>
+        // listener for the submit order button that gets info from every checked checkbox
+        $(document).ready(function () {
+            var removeIngredients = [];
+            var enhancers = [];
+            var enhancersPrices = [];
+            var proteins = [];
+            var proteinsPrices = [];
+            var fruits = [];
+            var fruitsPrices = [];
+            var extras = [];
+            var extrasPrices = [];
+            var smoothieName = "";
+            var smoothiePrice = 0;
+            $('[name="submitItemButton"]').click(function () {
+                // get the name of the smoothie
+                smoothieName = $('[name="smoothieName"]').text().replace(/(\r\n|\n|\r)/gm, "").trim();
+                // get the price of the smoothie
+                smoothiePrice = $('[name="smoothiePrice"]').text().trim();
+
+                // gets ingredient names to be removed
+                $('[name="removeIngredientsCheckbox"]:checked').each(function () {
+                    removeIngredients.push($('[for="' + this.id + '"]').text().trim().substring(3));
+                });
+                // gets enhancers to be added (and prices)
+                $('[name="enhancersCheckbox"]:checked').each(function () {
+                    enhancers.push($('[for="' + this.id + '"]').children('[name="enhancerName"]').text().trim());
+                    enhancersPrices.push($('[for="' + this.id + '"]').children('[name="enhancerPrice"]').text().trim().substring(1));
+                });
+                // same with proteins
+                $('[name="proteinsCheckbox"]:checked').each(function () {
+                    proteins.push($('[for="' + this.id + '"]').children('[name="proteinName"]').text().trim());
+                    proteinsPrices.push($('[for="' + this.id + '"]').children('[name="proteinPrice"]').text().trim().substring(1));
+                });
+                // and fruits
+                $('[name="fruitsCheckbox"]:checked').each(function () {
+                    fruits.push($('[for="' + this.id + '"]').children('[name="fruitName"]').text().trim());
+                    fruitsPrices.push($('[for="' + this.id + '"]').children('[name="fruitPrice"]').text().trim().substring(1));
+                });
+                // and extras
+                $('[name="extrasCheckbox"]:checked').each(function () {
+                    extras.push($('[for="' + this.id + '"]').children('[name="extraName"]').text().trim());
+                    extrasPrices.push($('[for="' + this.id + '"]').children('[name="extraPrice"]').text().trim().substring(1));
+                });
+                var data = {
+                    addItem: true,
+                    smoothieName: smoothieName,
+                    smoothiePrice: smoothiePrice,
+                    removeIngredients: removeIngredients,
+                    enhancers: enhancers,
+                    enhancersPrices: enhancersPrices,
+                    proteins: proteins,
+                    proteinsPrices: proteinsPrices,
+                    fruits: fruits,
+                    fruitsPrices: fruitsPrices,
+                    extras: extras,
+                    extrasPrices: extrasPrices,
+                };
+
+                var request = new XMLHttpRequest();
+                request.open("POST", "/customerSmoothie", true);
+                request.setRequestHeader("Content-Type", "application/json");
+                request.send(JSON.stringify(data));
+                // reload customer page
+                window.location.href = "/customer";
+            });
+
+
+            // checkout button listener -> sends user to checkout page
+            $('[name="checkoutButton"]').click(function () {
+                console.log("checkout button clicked");
+                // send request to server to display checkout page
+                $.ajax({
+                    url: '/customerCheckoutForm',
+                    type: 'GET',
+                    success: function (result) {
+                        console.log("success");
+                        window.location.href = "customerCheckoutForm";
+                    }
+                });
+            });
+
+            // listener for the remove item button
+            $('[name="cancelItemButton"]').click(function () {
+                console.log("cancel item button clicked");
+                // get the index number of the item to be removed
+                let index = Number($('[name="itemNumberToDelete"]').text().trim());
+                // send post request to server to remove item from cart
+                var data = {
+                    removeItem: true,
+                    index: index
+                };
+                var request = new XMLHttpRequest();
+                request.open("POST", "/customerSmoothie", true);
+                request.setRequestHeader("Content-Type", "application/json");
+                request.send(JSON.stringify(data));
+                window.location.reload();
+            });
+
+
+
+        });
+
+
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous">
+            // makes it so the browser scrolls to correct place for each category
+            const navigationHeight = document.querySelector('.navbar').offsetHeight;
+            document.documentElement.style.setProperty('--scroll-padding', `${navigationHeight}px`);
+        </script>
+</body>
+
+</html>

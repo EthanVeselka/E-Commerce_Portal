@@ -1,0 +1,76 @@
+.enhancers {
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: var(--scroll-padding, 100px);
+}
+.googleTranslate {
+  padding-left: 20px;
+}
+.navbar {
+  box-shadow: 0 1px 4px black;
+}
+
+.navbar-brand {
+  margin-left: 0%;
+}
+
+.proteins {
+  margin-bottom: 50px;
+}
+
+.fruits {
+  margin-bottom: 50px;
+}
+
+.extras {
+  margin-bottom: 50px;
+}
+
+.customizeCategories ul {
+  margin-left: 20%;
+  font-size: large;
+  margin-bottom: 50px;
+}
+
+.cartButton {
+  background-color: white;
+}
+
+.cartButton:hover {
+  background-color: red;
+}
+
+.footerAdd {
+  padding-left: 30px;
+}
+
+.checkout {
+  position: absolute;
+  bottom: 100px;
+  width: 92%;
+}
+
+.sticky-bottom {
+  box-shadow: 0 1px 4px black;
+}
+
+.fa-cart-shopping {
+  color: #b8282a;
+}
+
+/* .nav-link:hover{
+  text-decoration: underline;
+  text-decoration-color: #b8282a;
+  text-decoration-thickness: 3px;
+} */
+
+/* .btn-group input:hover{
+  transition: 0.3s;
+  background: #c72a2d;
+  color: white;
+  transition-timing-function: ease-out;
+} */

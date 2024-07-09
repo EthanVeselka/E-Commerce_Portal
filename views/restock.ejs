@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<head>
+   	<title>Manager Page</title>
+	   <meta name="viewport" content="width=device-width, initial-scale=1">
+	   <link id="manager" rel="stylesheet" href="/css/restock.css">
+	   <script src="https://kit.fontawesome.com/a31f3aa58a.js" crossorigin="anonymous"></script>
+	<style>
+		table { height:90%; overflow-y:scroll; display:block; table-layout: fixed;}
+	</style>
+</head>
+<body>
+	<div id="navbar" class="nav-container">
+		<div id="home">
+			<div><i class="fa-solid fa-house fa-xl" onclick="redirectIndex()"></i></div>
+		</div>
+		<div id="logo">
+			<a href="https://www.smoothieking.com"><img src="../images/logo3.png"></a>
+		</div>
+		<div id="stuff">
+			<div><input type="button" value="Server Portal" onclick="redirectServer()"></div>
+			<!-- <div><i class="fa-solid fa-cart-shopping fa-xl"></i></div> -->
+			<div id="translate-container"></div>
+		</div>
+	</div>
+
+	<div class="tab">
+		<button class="tablinks" type="button" id="Menu">Menu</button>
+		<button class="tablinks" type="button" id="Inv">Inventory</button>
+		<button class="tablinks" type="button" id="Sales">Sales Report</button>
+		<button class="tablinks" type="button" id="Stock">Restock Report</button>
+		<button class="tablinks" type="button" id="Excess">Excess Report</button>
+	</div>
+
+	<div class="tabcontent">
+		<div id="table">
+        	<h1>Restock Report</h1>
+			<% if (restockList.length != 0) { %>
+				<table>
+					<thead>
+						<tr>
+							<td>ID</td>
+							<td>Name</td>
+							<td>Current Stock</td>
+							<td>Amount Needed</td>
+							<td>Cost</td>
+						</tr>
+					</thead>
+					<tbody>
+						<% for (var i in restockList) {%>
+							<tr>
+								<td><%=restockList[i].ingredientid%></td> 
+								<td><%=restockList[i].ingredientname%></td>
+								<td><%=restockList[i].ingredientamount%></td>
+								<td><%=amountRestock[i]%></td>
+								<td><%=priceRestock[i]%></td>
+							</tr>
+						<% } %>
+					</tbody>
+				</table>
+		</div>
+
+		<div id="add-button1">
+			<button id="restockall" type="button">Restock All</button>
+		</div>
+        <% } %>
+
+        <% if (restocked) {%>
+            <p>All items successfully restocked.<p>
+        <% } %>
+
+        <script>
+            let stockButton = document.getElementById("restockall");
+            stockButton.addEventListener("click", function() {
+                window.location.href = "/manager/stock";
+            });
+        </script>
+	</div>
+
+	<!--Begin Google Translate-->
+    <script type="text/javascript">
+		function googleTranslateElementInit() {
+			new google.translate.TranslateElement({pageLanguage: 'en'}, 'translate-container');
+		}
+	</script>
+	<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+	<!--End Google Translate-->
+
+	<script>
+		let addMenuButton = document.getElementById("Menu");
+		addMenuButton.addEventListener("click", function() {
+			window.location.href = "/manager";
+		});
+
+		let addInvButton = document.getElementById("Inv");
+		addInvButton.addEventListener("click", function() {
+			window.location.href = "/manager/addinventory";
+		});
+
+		let restockButton = document.getElementById("Stock");
+		restockButton.addEventListener("click", function() {
+			window.location.href = "/manager/restock";
+		});
+
+		let salesButton = document.getElementById("Sales");
+		salesButton.addEventListener("click", function() {
+			window.location.href = "/manager/sales";
+		});
+
+		let excessButton = document.getElementById("Excess");
+		excessButton.addEventListener("click", function() {
+			window.location.href = "/manager/excess";
+		});
+	</script>
+
+	<script>
+		function redirectIndex() {
+            window.location.href="/signedin";
+        }
+
+        function redirectManager() {
+            window.location.href="/manager";
+        }
+
+        function redirectServer() {
+            window.location.href="/server";
+        }
+	</script>
+</body>

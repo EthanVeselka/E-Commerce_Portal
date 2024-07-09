@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<head>
+   	<title>Inventory</title>
+	   <meta name="viewport" content="width=device-width, initial-scale=1">
+	   <link id="inventory" rel="stylesheet" href="/css/add.css">
+	   <script src="https://kit.fontawesome.com/a31f3aa58a.js" crossorigin="anonymous"></script>
+	<style>
+		table { height:90%; overflow-y:scroll; overflow-x:scroll; display:block; table-layout: fixed; width: 90%;}
+	</style>
+</head>
+<body>
+	<div id="navbar" class="nav-container">
+		<div id="home">
+			<div><i class="fa-solid fa-house fa-xl" onclick="redirectIndex()"></i></div>
+		</div>
+		<div id="logo">
+			<a href="https://www.smoothieking.com"><img src="../images/logo3.png"></a>
+		</div>
+		<div id="stuff">
+			<div><input type="button" value="Server Portal" onclick="redirectServer()"></div>
+			<!-- <div><i class="fa-solid fa-cart-shopping fa-xl"></i></div> -->
+			<div id="translate-container"></div>
+		</div>
+	</div>
+
+	<div class="tab">
+		<button class="tablinks" type="button" id="Menu">Menu</button>
+		<button class="tablinks" type="button" id="Inv">Inventory</button>
+		<button class="tablinks" type="button" id="Sales">Sales Report</button>
+		<button class="tablinks" type="button" id="Stock">Restock Report</button>
+		<button class="tablinks" type="button" id="Excess">Excess Report</button>
+	</div>
+
+	<div class="tabcontent">
+		<div id="table">
+			<h1>Inventory</h1>
+            <table>
+                <thead>
+                    <tr>
+                        <td>Ingredient ID</td>
+                        <td>Ingredient Name</td>
+                        <td>Current Stock</td>
+                        <td>Minimum Stock</td>
+                        <td>Price</td>
+                        <td>Delete Ingredient</td>
+						<td>Decrease Stock</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for (var i in ingredients) {%>
+                        <tr>
+                            <td><%=ingredients[i].ingredientid%></td>
+                            <td><%=ingredients[i].ingredientname%></td>
+                            <td><%=ingredients[i].ingredientamount%></td>
+                            <td><%=ingredients[i].minimumamount%></td>
+                            <td><%=ingredients[i].ingredientprice%></td>
+                            <td id="delete-tab">
+								<form method='GET' action="/manager/deleteingredient">
+									<input type="number" name="id" value="<%=ingredients[i].ingredientid%>" hidden>
+									<input class="delete-item" type="submit" value="Delete">
+								</form>
+							</td>
+							<td>
+								<form id="change-stock-cont" method='GET' action="/manager/changeingredient">
+									<input class="amount-cont" type="text" name="change" placeholder="0" max="<%=ingredients[i].ingredientamount%>" required>
+									<input type="number" name="id" value="<%=ingredients[i].ingredientid%>" hidden>
+									<input class="change-stock" type="submit" value="Change Stock">
+								</form>
+							</td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+		</div>
+
+		<div id="add-field">
+            <h1>Add Ingredient</h1>
+            <form method='GET' action="/manager/addingredient">
+            <div class="container">
+                <div class="prompt">
+                    <span>Please input the information for the new ingredient</span>
+                </div>
+                <div>
+                    <label for="name">Name: </label>
+                    <input type="text" id="name" name="name" placeholder="New Ingredient" required/>
+                </div>
+                <div>
+                    <label for="stock">Stock Amount: </label>
+                    <input type="text" id="stock" name="stock" placeholder="0" min="0" required/>
+                </div>
+                <div>
+                    <label for="minStock">Minimum Amount: </label>
+                    <input type="text" id="minStock" name="minStock" placeholder="0" min="0" required/>
+                </div>
+                <div>
+                    <label for="price">Price: </label>
+                    <input type="text" id="price" name="price" placeholder="0.00" min="0" pattern="^\d*(\.\d{1,2})?$" required/>
+                </div>
+            </div>
+            <div id="add-button1">
+                <input type="submit" value="Add Ingredient +" />
+            </div>
+            </form>
+
+            <h1>Add Ingredient to Menu Item</h1>
+            <form method='GET' action="/manager/ingredienttoitem">
+            <div class="container">
+                <div class="prompt">
+                    <span>Please select the menu item, ingredient, and quantity of ingredient to add</span>
+                </div>
+                <div>
+                    <label for="item">Menu Item: </label>
+                    <select id="item" name="item">
+                        <option value="">Please Select</option>
+                        <% for (var i in menu) {%>
+                            <option value=<%= menu[i] %>><%=menu[i]%></option>
+                        <% } %>
+                    </select>
+                </div>
+                <div>
+                    <label for="ingredient">Ingredient: </label>
+                    <select id="ingredient" name="ingredient" required>
+                        <option value="">Please Select</option>
+                        <% for (var i in ingredients) {%>
+                            <option value=<%= ingredients[i] %>><%=ingredients[i].ingredientname%></option>
+                        <% } %>
+                    </select>
+                </div>
+                <div>
+                    <label for="quantity">Quantity: </label>
+                    <input type="text" id="quantity" name="quantity" placeholder="0" min="0" required/>
+                </div>
+
+            </div>
+            <div id="add-button2">
+                <input type="submit" value="Add Ingredient to Item +" />
+            </div>
+        </div>
+	</div>
+
+	<!--Begin Google Translate-->
+    <script type="text/javascript">
+		function googleTranslateElementInit() {
+			new google.translate.TranslateElement({pageLanguage: 'en'}, 'translate-container');
+		}
+	</script>
+	<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+	<!--End Google Translate-->
+
+	<script>
+		let addMenuButton = document.getElementById("Menu");
+		addMenuButton.addEventListener("click", function() {
+			window.location.href = "/manager";
+		});
+
+		let addInvButton = document.getElementById("Inv");
+		addInvButton.addEventListener("click", function() {
+			window.location.href = "/manager/addinventory";
+		});
+
+		let restockButton = document.getElementById("Stock");
+		restockButton.addEventListener("click", function() {
+			window.location.href = "/manager/restock";
+		});
+
+		let salesButton = document.getElementById("Sales");
+		salesButton.addEventListener("click", function() {
+			window.location.href = "/manager/sales";
+		});
+
+		let excessButton = document.getElementById("Excess");
+		excessButton.addEventListener("click", function() {
+			window.location.href = "/manager/excess";
+		});
+	</script>
+
+	<script>
+		function redirectIndex() {
+            window.location.href="/signedin";
+        }
+
+        function redirectManager() {
+            window.location.href="/manager";
+        }
+
+        function redirectServer() {
+            window.location.href="/server";
+        }
+	</script>
+</body>

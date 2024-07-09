@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smoothie King</title>
+    <link rel="stylesheet" href="/css/server.css">
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.2/examples/heroes/">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <!-- Script to use jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+</head>
+<!--Begin Google Translate-->
+<script type="text/javascript">
+    function googleTranslateElementInit() {
+        new google.translate.TranslateElement({ pageLanguage: 'en' }, 'translate-container');
+    }
+    function redirectIndex() {
+        window.location.href = "/signedin";
+    }
+
+    function redirectManager() {
+        window.location.href = "/manager";
+    }
+
+    function redirectServer() {
+        window.location.href = "/server";
+    }
+
+</script>
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+<!--End Google Translate-->
+
+
+<body>
+    <nav class="navbar sticky-top bg-light">
+        <div class="d-flex flex-row bd-highlight mb-2">
+            <div class="p-2 bd-highlight"><button type="button" class="btn btn-light" onclick="redirectIndex()">
+
+                    <img src=" ../images/homeButton.png" alt="" height="40" width="40">
+                </button></div>
+            <div class="p-2 bd-highlight"><button type="button" class="btn btn-danger" onclick="redirectManager()">
+                    Manager
+                </button></div>
+        </div>
+
+        <a class="navbar-brand" href="#">
+            <img src="https://static.olocdn.net/img/smoothieking/logo/logo-wide.png?v=1668607499" alt="Logo" width="60"
+                height="40" class="d-inline-block align-text-top">
+        </a>
+
+        <!-- shopping cart to toggle sidebar (offcanvas element) -->
+        <button class="cartButton btn btn-danger" type="button" data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+            Submitted Orders
+        </button>
+
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+            <div class="offcanvas-header">
+                <h5 id="offcanvasRightLabel">Orders</h5>
+                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
+                    aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <% if (submittedOrders.length> 0) { %>
+                    <ol class="list-group list-group-numbered">
+
+                        <% for (let i=0; i < submittedOrders.length; i++) { %>
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">
+                                        <%= submittedOrders[i].customerName %>
+                                    </div>
+                                    <%= "$" + submittedOrders[i].getTotal() %>
+                                </div>
+                                <span name="cancelOrderButton" class="cancelButton btn btn-sm  btn-dark ">X</span>
+                                <span name="orderComplete" class="btn btn-sm  btn-success ">&#9745</span>
+                                <!-- tracks order index for completion/deletion -->
+                                <p name="orderNumber" type="hidden" class="visually-hidden">
+                                    <%= i %>
+                                </p>
+                            </li>
+
+                            <% } %>
+                    </ol>
+
+                    <% } else { %>
+                        <p class="lead">No orders currently</p>
+                        <% } %>
+            </div>
+        </div>
+        </div>
+    </nav>
+
+    <main class="container-lg text-center">
+        <!-- header  -->
+        <div class="bg-white p-5 rounded">
+            <h2 class="display-2">Server Ordering</h2>
+            <p class="lead">Select a smoothie category to begin the ordering process.</p>
+            <div class="dropdown">
+                <button class="btn btn-danger dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    View Current Order
+                </button>
+                <ol class="dropdown-menu">
+                    <% if (order.items.length> 0) { %>
+                        <ol class="list-group list-group-numbered">
+
+                            <% for (let i=0; i < order.items.length; i++) { %>
+                                <li class="list-group-item d-flex justify-content-between align-items-start">
+                                    <div class="ms-2 me-auto">
+                                        <div class="fw-bold">
+                                            <%= order.items[i].itemName %>
+                                        </div>
+                                        <%= "$" + order.items[i].price %>
+                                    </div>
+                                    <span name="cancelItemButton" class="cancelButton btn btn-sm  btn-dark ">X</span>
+                                    <!-- use this to track which item number so if clicked on X, it will remove that item from the list -->
+                                    <p name="cancelItemNumber" type="hidden" class="visually-hidden">
+                                        <%= i %>
+                                    </p>
+                                </li>
+
+                                <% } %>
+                        </ol>
+                        <div class=" d-grid gap-1">
+                            <button class="checkout btn btn-danger" type="button" name="submitOrderButton">
+                                <div class="checkoutText">
+                                    Submit Order
+                                </div>
+                            </button>
+                        </div>
+                        <% } else { %>
+                            <p class="lead">No items in order</p>
+                            <% } %>
+
+                </ol>
+            </div>
+        </div>
+
+        <!-- smoothie categories -->
+        <div class="smoothieCategories">
+            <div class=" container-lg text-center" id="scroll-Top">
+                <div class="row">
+                    <div class="col">
+                        <div class="card" style="width: 18rem;">
+                            <img src="../images/GetFitServer.png" class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <a href="#" id="fitnessButton" class="btn btn-danger btn-lg">Get Fit</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card" style="width: 18rem;">
+                            <img src="../images/TreatServer.png" class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <a href="#" id="treatButton" class="btn btn-danger btn-lg">Enjoy A Treat</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" id="scroll-bottom">
+                    <div class="col">
+                        <div class="card" style="width: 18rem;">
+                            <img src="../images/BeWellServer2.png" class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <a href="#" id="beWellButton" class="btn btn-danger btn-lg">Be Well</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+
+                        <div class="card" style="width: 18rem;">
+                            <img src="../images/ManageWeightServer.png" class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <a href="#" id="weightLossButton" class="btn btn-danger btn-lg">Manage Weight</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    </main>
+    <footer class="sticky-bottom footer mt-auto py-3 bg-light ">
+        <div class="container">
+            <span class="text-muted">
+                <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+                    <li><a href="#scroll-Top" class="nav-link px-2 link-dark" role="button">Get Fit
+                            Smoothie</a></li>
+                    <li><a href="#scroll-Top" class="nav-link px-2 link-dark" role="button">Enjoy A
+                            Treat</a>
+                    </li>
+                    <li><a href="#scroll-bottom" class="nav-link px-2 link-dark" role="button">Be Well</a>
+                    </li>
+                    <li><a href="#scroll-bottom" class="nav-link px-2 link-dark" role="button">Manage
+                            Weight</a></li>
+                    <li>
+                        <div class="p-2 bd-highlight">
+                            <div class="translate container-sm" id="translate-container"></div>
+                        </div>
+                    </li>
+                </ul>
+            </span>
+        </div>
+    </footer>
+
+    <script>
+        // for each button clicked, render the smoothies in that category on a different page
+        let fitnessButton = document.getElementById("fitnessButton");
+        fitnessButton.addEventListener("click", function () {
+            window.location.href = "/fitness";
+        });
+
+        let weightLossButton = document.getElementById("weightLossButton");
+        weightLossButton.addEventListener("click", function () {
+            window.location.href = "/weightloss";
+        });
+
+        let beWellButton = document.getElementById("beWellButton");
+        beWellButton.addEventListener("click", function () {
+            window.location.href = "/bewell";
+        });
+
+        let treatButton = document.getElementById("treatButton");
+        treatButton.addEventListener("click", function () {
+            window.location.href = "/treat";
+        });
+
+        // checkout button listener -> sends user to checkout page
+        $('[name="submitOrderButton"]').click(function () {
+            console.log("submit order from server 2 button clicked");
+            // send a message to server to add the servers order to the submitted orders
+            $.ajax({
+                url: "/serverCheckoutForm",
+                type: "GET",
+                data: {
+                    submitOrder: true
+                },
+                success: function (response) {
+                    console.log("order submitted");
+                    window.location.href = "/serverCheckoutForm";
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        });
+
+        // listener for the remove item button
+        $('[name="cancelItemButton"]').click(function () {
+            console.log("cancel item button clicked");
+            // get the index number of the item to be removed
+            let cancelItemNumber = Number($(this).parent().children('[name="cancelItemNumber"]').text());
+            // send post request to server to remove item from cart
+            var data = {
+                cancelItem: true,
+                cancelItemNumber: cancelItemNumber
+            };
+            var request = new XMLHttpRequest();
+            request.open("POST", "/server", true);
+            request.setRequestHeader("Content-Type", "application/json");
+            request.send(JSON.stringify(data));
+            window.location.reload();
+        });
+
+        // listener for the button that cancels an order
+        $('[name="cancelOrderButton"]').click(function () {
+            console.log("cancel order button clicked");
+            // get the index number of the order to be canceled
+            var cancelOrderIndex = Number($(this).parent().children('[name="orderNumber"]').text());
+            var data = {
+                cancelOrder: true,
+                cancelOrderIndex: cancelOrderIndex
+            };
+            // send post request to server to remove order from queue and update database accordingly
+            var request = new XMLHttpRequest();
+            request.open("POST", "/server", true);
+            request.setRequestHeader("Content-Type", "application/json");
+            request.send(JSON.stringify(data));
+            window.location.reload();
+        });
+
+        // listener for the button that completes an order
+        $('[name="orderComplete"]').click(function () {
+            console.log("complete order button clicked");
+            // get the index number of the order to be completed
+            var completeOrderIndex = Number($(this).parent().children('[name="orderNumber"]').text());
+            var data = {
+                completeOrder: true,
+                completeOrderIndex: completeOrderIndex
+            };
+            // send post request to server to remove order from queue and update database accordingly
+            var request = new XMLHttpRequest();
+            request.open("POST", "/server", true);
+            request.setRequestHeader("Content-Type", "application/json");
+            request.send(JSON.stringify(data));
+            window.location.reload();
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous">
+            // makes it so the browser scrolls to correct place for each category
+            const navigationHeight = document.querySelector('.navbar').offsetHeight;
+            document.documentElement.style.setProperty('--scroll-padding', `${navigationHeight}px`);
+        </script>
+</body>
+
+</html>

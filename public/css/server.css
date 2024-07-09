@@ -1,0 +1,65 @@
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: var(--scroll-padding, 100px);
+}
+.navbar {
+  box-shadow: 0 1px 4px black;
+}
+.navbar-brand img {
+  margin-left: 0%;
+}
+.home {
+  color: #b8282a;
+}
+.row {
+  margin-bottom: 50px;
+}
+
+.cartButton {
+  margin-right: 2%;
+  margin-left: 7%;
+}
+
+.customize {
+  margin-top: 0px;
+  margin-bottom: 25px;
+}
+.enhancers {
+  margin-bottom: 25px;
+}
+.proteins {
+  margin-bottom: 25px;
+}
+.fruits {
+  margin-bottom: 25px;
+}
+.extras {
+  margin-bottom: 25px;
+}
+
+.footerAdd {
+  padding-left: 20px;
+}
+.cancelItemButton {
+  padding-left: 5px;
+}
+
+.dropdown-menu {
+  width: 20%;
+}
+
+.smoothieCategories {
+  margin-left: 18%;
+}
+
+.sticky-bottom {
+  box-shadow: 0 1px 4px black;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+footer {
+  position: sticky;
+  bottom: 0;
+}

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<head>
+   	<title>Manager Page</title>
+	   <meta name="viewport" content="width=device-width, initial-scale=1">
+	   <link id="manager" rel="stylesheet" href="/css/sales.css">
+	   <script src="https://kit.fontawesome.com/a31f3aa58a.js" crossorigin="anonymous"></script>
+	<style>
+		table {overflow-y:scroll; display:block; table-layout: fixed;}
+	</style>
+</head>
+<body>
+	<div id="navbar" class="nav-container">
+		<div id="home">
+			<div><i class="fa-solid fa-house fa-xl" onclick="redirectIndex()"></i></div>
+		</div>
+		<div id="logo">
+			<a href="https://www.smoothieking.com"><img src="../images/logo3.png"></a>
+		</div>
+		<div id="stuff">
+			<div><input type="button" value="Server Portal" onclick="redirectServer()"></div>
+			<!-- <div><i class="fa-solid fa-cart-shopping fa-xl"></i></div> -->
+			<div id="translate-container"></div>
+		</div>
+	</div>
+
+	<div class="tab">
+		<button class="tablinks" type="button" id="Menu">Menu</button>
+		<button class="tablinks" type="button" id="Inv">Inventory</button>
+		<button class="tablinks" type="button" id="Sales">Sales Report</button>
+		<button class="tablinks" type="button" id="Stock">Restock Report</button>
+		<button class="tablinks" type="button" id="Excess">Excess Report</button>
+	</div>
+
+	<div class="tabcontent">
+        <form method='GET' action="/manager/sales">
+        <div class="container">
+            <h1>Sales Data</h1>
+            <div class="prompt">
+                <span>Please input the start and end date for the report in the format yyyy-mm-dd</span>
+            </div>
+            <div>
+                <label for="startdate">Start Date: </label>
+                <input type="text" id="startdate" name="startdate" placeholder="yyyy-mm-dd" pattern="\d{4}-\d{2}-\d{2}" required/>
+            </div>
+            <div>
+                <label for="enddate">End Date: </label>
+                <input type="text" id="enddate" name="enddate" placeholder="yyyy-mm-dd" pattern="\d{4}-\d{2}-\d{2}" required/>
+            </div>
+        </div>
+        <div id="button">
+            <input type="submit" value="Generate Report"/>
+        </div>
+        </form>
+
+        <div class="container2">
+            <div class="table1">
+                <% if (display) { %>
+                    <h1>Sales Report</h1>
+                    <table>
+                        <thead>
+                            <tr>
+                                <td>ID</td>
+                                <td>Name</td>
+                                <td>Category</td>
+                                <td>Item Price</td>
+                                <td>Number Sold</td>
+                                <td>Total Sales</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% for (var i in itemIDs) {%>
+                                <tr>
+                                    <td><%=itemIDs[i]%></td>
+                                    <td><%=itemNames[i]%></td>
+                                    <td><%=itemCategories[i]%></td>
+                                    <td><%=itemPrice[i]%></td>
+                                    <td><%=numSold[i]%></td>
+                                    <td><%=itemTotal[i]%></td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                <% } %>
+            </div>
+
+            <div class="table2">
+                <% if (display) { %>
+                    <h1>Pairs Report</h1>
+                    <table>
+                        <thead>
+                            <tr>
+                                <td width="200 px">Common Pairs</td>
+                                <td width="200 px">Number of Occurences</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% for (let [key, value] of sortedPairs) {%>
+                                <tr>
+                                    <td width="200 px"><%=key%></td> 
+                                    <td width="200 px"><%=value%></td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                <% } %>
+            </div>
+        </div>
+    </div>
+
+	<!--Begin Google Translate-->
+    <script type="text/javascript">
+		function googleTranslateElementInit() {
+			new google.translate.TranslateElement({pageLanguage: 'en'}, 'translate-container');
+		}
+	</script>
+	<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+	<!--End Google Translate-->
+
+	<script>
+		let addMenuButton = document.getElementById("Menu");
+		addMenuButton.addEventListener("click", function() {
+			window.location.href = "/manager";
+		});
+
+		let addInvButton = document.getElementById("Inv");
+		addInvButton.addEventListener("click", function() {
+			window.location.href = "/manager/addinventory";
+		});
+
+		let restockButton = document.getElementById("Stock");
+		restockButton.addEventListener("click", function() {
+			window.location.href = "/manager/restock";
+		});
+
+		let salesButton = document.getElementById("Sales");
+		salesButton.addEventListener("click", function() {
+			window.location.href = "/manager/sales";
+		});
+
+		let excessButton = document.getElementById("Excess");
+		excessButton.addEventListener("click", function() {
+			window.location.href = "/manager/excess";
+		});
+	</script>
+
+	<script>
+		function redirectIndex() {
+            window.location.href="/signedin";
+        }
+
+        function redirectManager() {
+            window.location.href="/manager";
+        }
+
+        function redirectServer() {
+            window.location.href="/server";
+        }
+	</script>
+</body>

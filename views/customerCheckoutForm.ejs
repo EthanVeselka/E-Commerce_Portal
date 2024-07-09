@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smoothie King</title>
+    <link rel="stylesheet" href="/css/customerCart.css">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.2/examples/sticky-footer-navbar/">
+    <!-- Script to use jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="https://kit.fontawesome.com/a31f3aa58a.js" crossorigin="anonymous"></script>
+    <!--Begin Google Translate-->
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({ pageLanguage: 'en' }, 'translate-container');
+        }
+    </script>
+    <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <!--End Google Translate-->
+</head>
+
+<body>
+
+    <section>
+        <!-- navigation -->
+        <nav class="navbar sticky-top bg-light">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col">
+                        <a class="back-button" href="/customer">
+                            <img src="../images/back_arrow.png" width="25" height="25"
+                                class="d-inline-block align-text-left">
+                        </a>
+                    </div>
+                    <div class="col">
+                        <div id="translate-container"></div>
+                    </div>
+                </div>
+                <a class="logo navbar-brand" href="#">
+                    <img src="https://static.olocdn.net/img/smoothieking/logo/logo-wide.png?v=1668607499" alt="Logo"
+                        width="60" height="40" class="d-inline-block align-text-top">
+                </a>
+                <!-- shopping cart to toggle sidebar (offcanvas element) -->
+                <button class="cartButton btn btn-light" type="button" data-bs-toggle="offcanvas"
+                    data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"><i
+                        class="fa-solid fa-cart-shopping fa-xl"></i></button>
+
+                <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight"
+                    aria-labelledby="offcanvasRightLabel">
+                    <div class="offcanvas-header">
+                        <h5 id="offcanvasRightLabel">Your Order</h5>
+                        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
+                            aria-label="Close"></button>
+                    </div>
+
+                    <!-- body where the order is displayed in cart goes here -->
+                    <div class="offcanvas-body">
+
+                        <% if (orderCustomer.items.length> 0) { %>
+                            <ol class="list-group list-group-numbered">
+
+                                <% for (let i=0; i < orderCustomer.items.length; i++) { %>
+                                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="ms-2 me-auto">
+                                            <div class="fw-bold">
+                                                <%= orderCustomer.items[i].itemName %>
+                                            </div>
+                                            <%= "$" + orderCustomer.items[i].getTotalPrice() %>
+                                        </div>
+                                        <span name="cancelItemButton"
+                                            class="cancelButton btn btn-sm  btn-dark ">X</span>
+                                    </li>
+                                    <!-- use this to track which item number so if clicked on X, it will remove that item from the list -->
+                                    <p name="itemNumberToDelete" type="hidden" class="visually-hidden">
+                                        <%= i %>
+                                    </p>
+
+                                    <% } %>
+                            </ol>
+                            <div class=" d-grid gap-1">
+                                <button class="checkout btn btn-danger" type="button" name="checkoutButton">
+                                    <div class="checkoutText">
+                                        Checkout
+                                    </div>
+                                </button>
+                            </div>
+
+                            <% } else { %>
+                                <p class="lead">Your cart is empty</p>
+                                <% } %>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <!-- end of navigation -->
+
+        <div class="container">
+            <div class="py-5 text-center">
+                <h2>Checkout</h2>
+            </div>
+            <div class="row g-5">
+
+                <!-- display cart on page  -->
+                <div class="col-md-5 col-lg-4 order-md-last">
+                    <h4 class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-danger">Your cart</span>
+                        <span class="badge bg-danger rounded-pill">
+                            <%= orderCustomer.items.length %>
+                        </span>
+                    </h4>
+
+                    <ul class="list-group mb-3">
+                        <% for (let i=0; i < orderCustomer.items.length; i++) { %>
+
+                            <li class="list-group-item d-flex justify-content-between lh-sm">
+                                <div>
+                                    <h6 class="my-0">
+                                        <%= orderCustomer.items[i].itemName %>
+                                    </h6>
+                                </div>
+                                <span class="text-muted">$<%= orderCustomer.items[i].getTotalPrice() %></span>
+                            </li>
+                            <% } %>
+                                <li class="list-group-item d-flex justify-content-between">
+                                    <span>Total (USD)</span>
+                                    <strong>
+                                        $<%= orderCustomer.getTotal() %>
+                                    </strong>
+                                </li>
+                    </ul>
+                </div>
+                <!-- end of cart  -->
+
+                <!-- form to enter customer information -->
+                <div class="col-md-7 col-lg-8">
+                    <form class="was-validated" action="/customerCheckoutForm" method="GET">
+                        <div class="row g-3">
+                            <div class="col-sm-6">
+                                <label for="firstName" class="form-label">First name</label>
+                                <input type="text" class="form-control" id="firstName" name="firstName" placeholder=""
+                                    value="" required>
+                                <div class="invalid-feedback">
+                                    Valid first name is required.
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <label for="lastName" class="form-label">Last name</label>
+                                <input type="text" class="form-control" id="lastName" name="lastName" placeholder=""
+                                    value="" required>
+                                <div class="invalid-feedback">
+                                    Valid last name is required.
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <label for="phone" class="form-label">Phone Number</label>
+                                <input type="tel" class="form-control" id="phone" name="phone" placeholder="" required>
+                                <div class="invalid-feedback">
+                                    Valid phone number is required.
+                                </div>
+                            </div>
+
+
+                            <div class="col-sm-6">
+                                <label for="email" class="form-label">Email <span
+                                        class="text-muted">(Optional)</span></label>
+                                <input type="email" class="form-control" id="email" name="email" placeholder="">
+                                <div class="invalid-feedback">
+                                    Please enter a valid email address for order updates.
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <hr class="my-4">
+                        <input type="submit" class="w-100 btn btn-danger btn-lg"></input>
+                    </form>
+                </div>
+                <!-- end of form -->
+            </div>
+
+
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+                integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+                crossorigin="anonymous">
+
+                    // makes it so the browser scrolls to correct place for each category
+                    const navigationHeight = document.querySelector('.navbar').offsetHeight;
+                    document.documentElement.style.setProperty('--scroll-padding', `${navigationHeight}px`);
+                </script>
+
+            <script>
+
+                $(document).ready(function () {
+                    // create listener for checkout button
+                    $('[name="checkoutButton"]').click(function () {
+                        console.log("checkout button clicked");
+                        // send request to server to display checkout page
+                        $.ajax({
+                            url: '/customerCheckoutForm',
+                            type: 'GET',
+                            success: function (result) {
+                                console.log("success");
+                                window.location.href = "customerCheckoutForm";
+                            }
+                        });
+                    });
+
+                    // listener for the remove item button
+                    $('[name="cancelItemButton"]').click(function () {
+                        console.log("cancel item button clicked");
+                        // get the index number of the item to be removed
+                        let index = Number($('[name="itemNumberToDelete"]').text().trim());
+                        // send post request to server to remove item from cart
+                        var data = {
+                            removeItem: true,
+                            index: index
+                        };
+                        var request = new XMLHttpRequest();
+                        request.open("POST", "/customerCheckoutForm", true);
+                        request.setRequestHeader("Content-Type", "application/json");
+                        request.send(JSON.stringify(data));
+                        window.location.reload();
+                    });
+                });
+
+
+            </script>
+
+</body>
+
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<head>
+   <title>Smoothie King Menu</title>
+   <link href="/css/style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+   <table>
+		<thead>
+			<tr>
+				<td width="70px"><b>Item Name</b></td>
+				<td width="70px"><b>Category</b></td>
+				<td width="70px"><b>Price</b></td>
+			</tr>
+		</thead>
+		<tbody>
+			<% for (var i in menuItems) {%>
+				<tr>
+					<td width="70px"><%=menuItems[i].itemname%></td> 
+					<td width="70px"><%=menuItems[i].itemcategory%></td>
+					<td width="70px"><%=menuItems[i].price%></td>
+				</tr>
+			<% } %>
+		</tbody>
+	</table>
+</body>
